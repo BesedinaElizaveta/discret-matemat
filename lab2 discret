@@ -1,0 +1,79 @@
+def truth_table_by_vec(v):
+    assert(len(v) == 8)
+    tt = {}
+    i = 0
+    for A in range(2):
+        for B in range(2):
+            for C in range(2):
+                tt[A, B, C] = v[i]
+                i += 1
+    return tt
+def get_sdnf(tt): #сднф функция
+    return ' | '.join(map(conj_str, [key for key in tt if tt[key]]))
+    conj_strs = []
+    for vars_values in tt:
+        if tt[vars_values]:
+           conj_strs.append(conj_str(vars_values))
+        if conj_strs == []:
+            return "0"
+        else:
+            return " | ".join(conj_strs)
+def conj_str(vars):
+    var_names = ('x', 'y', 'z')
+    return '&'.join(map(literal_str, var_names, vars))
+def literal_str(var, deg):
+    #var^deg
+    if deg:
+        return var
+    else:
+        return '~'+var
+def get_sknf(tt): #скнф функция
+    return ' | '.join(map(conj_str, [key for key in tt if tt[key]]))
+    disj_strs = []
+    for vars_values in tt:
+        if tt[vars_values]==0:
+            disj_strs.append(disj_str(vars_values))
+        if disj_strs == []:
+            return "1"
+        else:
+            return " & ".join(disj_strs)
+def disj_str(vars_values):
+        return "(" + literal_str("x", not vars_values[0]) + "|" + literal_str("y", not vars_values[1]) + "|" + literal_str("z", not vars_values[2]) + ")"
+tt = truth_table_by_vec((1, 0, 1, 0, 1, 0, 1, 0))
+print(get_sknf(tt))
+#проверка
+def f(x, y, z):
+    return (~x&~y&~z | ~x&y&~z | x&~y&~z | x&y&~z)
+tt_test = truth_table_by_vec((1, 0, 1, 0, 1, 0, 1, 0))
+if tt == tt_test:
+    print("OK")
+else:
+    print("Ошибка")
+#выделение существенных и фиктивных переменных
+def find_fict_vars(tt):
+    fict_x = all([tt[0, A, B] == tt[1, A, B] for B in range(2) for A in range(2)])
+    fict_y = all([tt[A, 0, B] == tt[A, 1, B] for B in range(2) for A in range(2)])
+    fict_z = all([tt[A, B, 0] == tt[A, B, 1] for B in range(2) for A in range(2)])
+    vars = {'x', 'y', 'z'}
+    fict_vars = set()
+    if fict_x:
+        fict_vars.add('x')
+    if fict_y:
+        fict_vars.add('y')
+    if fict_z:
+        fict_vars.add('z')
+    sign_vars = vars - fict_vars
+    return fict_vars, sign_vars
+
+fict_sign = find_fict_vars(tt)
+print('Фиктивные переменные: ', fict_sign[0])
+print('Существенные переменные: ', fict_sign[1])
+#нахождение двойственной функции
+def adjoint_func(tt):
+    adj_tt = {}
+    for key in tt:
+        inv_key = tuple(map(lambda x: 1 - x, key))
+    adj_tt[key] =tt[key]
+    return adj_tt
+
+print(adjoint_func(tt))
