@@ -1,0 +1,28 @@
+#1
+a = int(input("Введите первое число: "))
+c = input("Введите желаемую формулу  комбинаторики:")
+if c =="Размещение" or c=="Сочетание":
+    b = int(input("Введите второе число: "))
+factorial = 0
+def factor(n):
+    if n ==1:
+        return 1
+    return factor(n-1)*n
+if c =="Перестановка":
+    factorial = factor(a)
+if c =="Размещение":
+    factorial = factor(a)/(factor(a-b))
+if c == "Сочетание":
+    factorial = factor(a) / (factor(b)*(factor(a - b)))
+else:
+    print("Error")
+print(factorial)
+#2
+a1 = list(input("Введите желаемое слово:"))
+b1 = len(a1)
+c1 = 0
+n =[]
+for c1 in set(a1):
+    n.append(a1.count(c1))
+for j in range(len(n))
+    fasctorial = factor(b1)/(factor(b1[i]*len(n)))
