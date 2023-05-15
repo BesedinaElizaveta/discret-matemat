@@ -15,18 +15,21 @@ def analyze_relation(R):
     for i in range(n):
         for j in range(n):
             for k in range(n):
-                if (not (R[i][j]*R[j][k]==R[i][k])):
+                if (not (R[i][j] and R[j][k] <= R[i][k])):
                     transitive = False
     suryect= True
-    for i in range(n):
-        for j in range(n):
-            if not (R[i][j+1] == R[j+1][i]):
-                suryect = False
+    for j in range(n):
+        one = False
+        for i in range(n):
+            if R[i][j]:
+                one = True
+        if not one:
+            suryect = False
     inyect=True
     for i in range(n):
         for j in range(n):
             for k in range(n):
-                if (not (R[i][j]*R[j][k]==R[j=k][k=j])):
+                if (not (R[i][j]*R[j][k]==R[j==k][k==j])):
                     inyect = False
 
 
