@@ -1,5 +1,0 @@
-#include <stdio.h>
-int main() {
-    printf("%d\n %-5d\n %5d\n", 555, 555, 555);
-    return 0;
-}
