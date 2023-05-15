@@ -30,3 +30,18 @@ for k in range(len(n)-1):
 for j in range(len(n)):
     factorial = factor(b1)/o
 print(factorial)
+def calculate_paths(n, m):
+    paths = [[0 for _ in range(m)] for _ in range(n)]
+    for i in range(n):
+        paths[i][0] = 1
+    for j in range(m):
+        paths[0][j] = 1
+    for i in range(1, n):
+        for j in range(1, m):
+            paths[i][j] = paths[i-1][j] + paths[i][j-1]
+    return paths[n-1][m-1]
+
+n = int(input("Введите количество строк: "))
+m = int(input("Введите количество столбцов: "))
+paths = calculate_paths(n, m)
+print("Число путей:", paths)
