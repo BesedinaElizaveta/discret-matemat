@@ -1,0 +1,168 @@
+#1
+a = int(input("Введите x"))
+b = int(input("Введите y"))
+c = (a and b)
+d = (a or b)
+e = ((not a and b) or (not b and a))
+f = not((not a and b) or not b and a)
+print("Конъюнкция: ", c, "\nДизъюнкция: ", d, "\nИсключающее или: ", e, "\nЭквиваленция: ", f)
+
+#2
+
+l1 = input("Введите 1 множество:")
+l2 = input("Введите 2 множество:")
+list1 = l1.split(',')
+list2 = l2.split(',')
+set1 = set(list1)
+set2 = set(list2)
+setobed = set1 | set2
+setintersect = set1 & set2
+printf("Дизъюнкция множеств: ", setobed, "\nКонъюнкция множеств: ", setintersect)
+
+#3
+
+def factor(n):
+    if (n==1):
+        return 1
+    else:
+        return factor(n-1)*n
+i = int(input("Введите n: "))
+j = int(input("Введите m: "))
+p = factor(i)
+anm = factor(i)/ factor(i-j)
+cnm = factor(i)/ factor(i-j)*factor(j)
+print("Перестановка", p, "\nРазмещение: ", anm, "\nСочетание: ", cnm)
+
+#задание на графы: 4
+
+class Graph: #создание класса для занесения в него значений вершин и ребер
+    def __init__(self):
+        self.vertices = {} #вершины, пустой словарь
+        self.edges = set() #ребра, множество
+
+    def add_vertex(self, vertex): #добавление вершины(функция определения вершины)
+        if vertex not in self.vertices: #если вершина не принадлежит типу вершин, то она обнуляется
+            self.vertices[vertex] = set()
+
+    def add_edge(self, edge): #добавление ребер(функция определения ребер)
+        v1, v2 = edge
+        self.add_vertex(v1)
+        self.add_vertex(v2)
+        self.vertices[v1].add(v2)
+        self.vertices[v2].add(v1)
+        self.edges.add(edge)
+
+    def adjacent_vertices(self, vertex):
+        if vertex in self.vertices:
+            return list(self.vertices[vertex])
+        else:
+            return []
+
+    def adjacent_edges(self, vertex):
+        adjacent_edges = []
+        for edge in self.edges:
+            if vertex in edge:
+                adjacent_edges.append(edge)
+        return adjacent_edges
+
+def main():
+    graph = Graph()
+
+    vertices_input = input("Введите вершины графа через запятую (например, 1,2,3,4): ").split(',')
+    for vertex in vertices_input:
+        graph.add_vertex(vertex.strip())
+
+    edges_input = input("Введите рёбра графа через запятую (например, 12,23,13): ").split(',')
+    for edge in edges_input:
+        v1, v2 = edge.strip()
+        graph.add_edge((v1, v2))
+
+    vertex_to_find = input("Введите вершину, для которой нужно найти смежные вершины и рёбра: ")
+
+    adjacent_vertices = graph.adjacent_vertices(vertex_to_find)
+    adjacent_edges = graph.adjacent_edges(vertex_to_find)
+
+    print(f"Смежные вершины для вершины {vertex_to_find}: {', '.join(adjacent_vertices)}")
+    print(f"Смежные рёбра для вершины {vertex_to_find}: {', '.join(adjacent_edges)}")
+
+if __name__ == "__main__":
+    main()
+
+#5
+import networkx as nx
+
+def find_paths_and_minimum_paths(graph, start, end):
+    try:
+        # Находим все простые пути от начальной вершины к конечной вершине
+        all_paths = list(nx.all_simple_paths(graph, source=start, target=end))
+
+        # Находим минимальные пути от начальной вершины к конечной вершине
+        shortest_paths = list(nx.shortest_simple_paths(graph, source=start, target=end, weight='weight'))
+
+        return all_paths, shortest_paths
+    except nx.NetworkXNoPath:
+        return [], []
+
+def main():
+    # Создаем ориентированный граф
+    G = nx.DiGraph()
+
+    # Ввод вершин и метрических значений рёбер
+    vertices = input("Введите вершины графа через запятую (например, A,B,C,D): ").split(',')
+    for vertex in vertices:
+        G.add_node(vertex.strip())
+
+    edges_input = input("Введите рёбра графа и их метрические значения через запятую (например, A->B:5,B->C:3,C->D:2): ").split(',')
+    for edge in edges_input:
+        edge_parts = edge.strip().split('->')
+        if len(edge_parts) == 2:
+            v1, v2 = edge_parts[0], edge_parts[1].split(':')[0]
+            weight = float(edge_parts[1].split(':')[1])
+            G.add_edge(v1, v2, weight=weight)
+
+    start_vertex = input("Введите начальную вершину (A): ")
+    end_vertex = input("Введите конечную вершину (D): ")
+
+    all_paths, shortest_paths = find_paths_and_minimum_paths(G, start_vertex, end_vertex)
+
+    print(f"Все маршруты от {start_vertex} до {end_vertex}:")
+    for path in all_paths:
+        print(f"Путь: {' -> '.join(path)}, Метрическое значение: {sum(G[path[i]][path[i + 1]]['weight'] for i in range(len(path) - 1))}")
+
+    print(f"\nМинимальные маршруты от {start_vertex} до {end_vertex} с указанием метрических значений в (у.е):")
+    for path in shortest_paths:
+        print(f"Путь: {' -> '.join(path)}, Метрическое значение: {sum(G[path[i]][path[i + 1]]['weight'] for i in range(len(path) - 1))}")
+
+if __name__ == "__main__":
+    main()
+
+#6
+from geopy.distance import geodesic
+
+# Функция для расчета расстояния между двумя координатами
+def calculate_distance(coord1, coord2):
+    return geodesic(coord1, coord2).kilometers
+
+# Функция для ввода координат и расчета расстояний
+def main():
+    # Ввод координат (широты и долготы) для трех населенных пунктов
+    locations = {}
+    for i in range(3):
+        name = input(f"Введите название {i + 1}-го населенного пункта: ")
+        latitude = float(input(f"Введите широту {i + 1}-го населенного пункта (градусы): "))
+        longitude = float(input(f"Введите долготу {i + 1}-го населенного пункта (градусы): "))
+        locations[name] = (latitude, longitude)
+
+    # Ввод координат Нью-Йорка и Сиднея из вашего дополнительного файла
+    # Например, locations["New York"] = (40.7128, -74.0060)
+    # locations["Sydney"] = (-33.8651, 151.2099)
+
+    # Расчет расстояний между всеми парами населенных пунктов
+    for name1, coord1 in locations.items():
+        for name2, coord2 in locations.items():
+            if name1 != name2:
+                distance = calculate_distance(coord1, coord2)
+                print(f"Расстояние между {name1} и {name2}: {distance:.2f} км")
+
+if __name__ == "__main__":
+    main()
