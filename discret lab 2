@@ -1,0 +1,18 @@
+vershini = (input("Введите вершины графа через запятую"))
+rebra = []
+verslist = (vershini.split(','))
+verlisto = []
+rebralosto= []
+for i in range(len(verslist)):
+    for j in range(len(verslist)):
+        if (verslist[i] = verslist[j]):
+            ma = (null)
+            verlisto.append(ma)
+        else: 
+            ma = [verslist[i], verslist[j]]
+            verlisto.append(ma)
+print(verlisto)
+rebra = (input("Введите метрические значения ребер для каждой вершины соответственно:"))
+rebralist = (rebra.split(','))
+rebralist = [int (x) for x in rebralist]
+print(rebralist)
