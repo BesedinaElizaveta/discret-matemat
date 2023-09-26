@@ -1,0 +1,66 @@
+import networkx as nx
+
+# Создаем ориентированный граф
+G = nx.DiGraph()
+
+# Ввод вершин и ребер с метрическими значениями
+while True:
+    try:
+        vertex = input("Введите начальную вершину (или 'exit' для завершения): ")
+        if vertex == '-':
+            break
+        vertex1 = input("Введите конечную вершину: ")
+        rebro = float(input("Введите метрическое значение ребра: "))
+        G.add_edge(vertex, vertex1, weight=rebro)
+    except ValueError:
+        print("Ошибка!")
+
+# Запрос начальной и конечной точек
+start = input("Введите начальную вершину (н-р A): ")
+end = input("Введите конечную вершину (н-р D): ")
+
+# Найти все простые пути от A до D и обратно
+all_simple_paths = list(nx.all_simple_paths(G, start, end))
+
+# Вывод маршрутов и их метрических значений
+for path in all_simple_paths:
+    dlina = sum(G[path[i]][path[i+1]]['weight'] for i in range(len(path)-1))
+    print(f"Маршрут: {' -> '.join(path)}, Метрическое значение: {dlina} у.е")
+
+# Найти минимальный маршрут от A до D и обратно
+try:
+    shortest_path = nx.shortest_path(G, source=start, target=end, weight='weight')
+    shortest_distance = nx.shortest_path_length(G, source=start, target=end, weight='weight')
+    print(f"Минимальный маршрут: {' -> '.join(shortest_path)}, Минимальное метрическое значение: {shortest_distance} у.е")
+except nx.NetworkXNoPath:
+    print("Нет доступных маршрутов между заданными вершинами.")
+
+#3
+
+from geopy.distance import geodesic
+
+# Функция для расчета расстояния между двумя координатами
+def calculate_distance(coord1, coord2):
+    return geodesic(coord1, coord2).kilometers
+
+# Ввод координат для трех населенных пунктов
+print("Введите координаты для трех населенных пунктов:")
+city1 = (float(input("Широта пункта 1: ")), float(input("Долгота пункта 1: ")))
+city2 = (float(input("Широта пункта 2: ")), float(input("Долгота пункта 2: ")))
+city3 = (float(input("Широта пункта 3: ")), float(input("Долгота пункта 3: ")))
+
+# Рассчитываем расстояния между пунктами
+distance1_2 = calculate_distance(city1, city2)
+distance2_3 = calculate_distance(city2, city3)
+distance1_3 = calculate_distance(city1, city3)
+
+# Вывод расстояний
+print(f"Расстояние между пунктом 1 и пунктом 2: {distance1_2} км")
+print(f"Расстояние между пунктом 2 и пунктом 3: {distance2_3} км")
+print(f"Расстояние между пунктом 1 и пунктом 3: {distance1_3} км")
+
+# Дополнительное расстояние Нью-Йорк - Сидней (координаты Нью-Йорка и Сиднея)
+new_york = (40.7128, -74.0060)  # Нью-Йорк
+sydney = (-33.8688, 151.2093)  # Сидней
+distance_new_york_sydney = calculate_distance(new_york, sydney)
+print(f"Расстояние между Нью-Йорком и Сиднеем: {distance_new_york_sydney} км")
