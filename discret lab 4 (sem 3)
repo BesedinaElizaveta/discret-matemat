@@ -1,0 +1,57 @@
+from bs4 import BeautifulSoup
+from geopy.distance import geodesic
+
+xml = open('map.osm', 'r', encoding= 'utf8').read()
+soup = BeautifulSoup(xml, 'lxml')
+'''print(soup)'''
+cnt = 0
+for node in soup.find_all('node'):
+    for tag in node('tag'):
+        if tag['k']=='public_transport' and tag['v'] == 'stop_position':
+            cnt+=1
+            print('stop_position', cnt)
+
+
+l1=0
+for node in soup.find_all('node'):
+    for tag in node('tag'):
+        if tag['k']=='description' and tag['v'] == 'susi-bar':
+            l1+=1
+            print('Sushi bar:', l1)
+
+
+#9 остановки
+def calculate_distance(coord1, coord2):
+    return geodesic(coord1, coord2).kilometers
+
+x=[]
+for node in soup.find_all('node'):
+    for tag in node('tag'):
+        if tag['k']=='public_transport' and tag['v'] == 'stop_position':
+            x1 = (node['lat'], node['lon'])
+            x.append(x1)
+xx=[]
+for i in range(len(x)):
+    for j in range(len(x)):
+        xx1= (calculate_distance(x[i], x[j]))
+        if (xx1 !=0):
+            xx.append(xx1)
+sett = set(xx)
+print(sett)
+
+#ввгу тгму
+
+for node in soup.find_all('node'):
+    for tag in node('tag'):
+        if tag['k']=='name' and tag['v'] == 'Владивостокский Государственный Университет':
+            x1 = (node['lat'], node['lon'])
+            x.append(x1)
+        if 
+
+
+
+
+
+
+
+
