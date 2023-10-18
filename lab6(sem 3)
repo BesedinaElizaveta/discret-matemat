@@ -1,0 +1,141 @@
+num_nodes = int(input("Введите количество вершин в графе: "))
+adj_matrix = [[0] * num_nodes for _ in range(num_nodes)]
+matrix1 = [[0] * num_nodes for _ in range(num_nodes)]
+for i in range(num_nodes):
+    for j in range(num_nodes):
+        if i != j:
+            edge = (int((input(f"Введите расстояние между вершинами {i} и {j}(если его нет или нет дополнительного ребра, введите 0): "))))
+            adj_matrix[i][j] = edge
+            if (adj_matrix[i][j] > 0):
+                matrix1[i][j] = 1;
+            else:
+                matrix1[i][j] = 0;
+for i in range(num_nodes):
+    for j in range(num_nodes):
+        print(matrix1[i][j], end =' ')
+    print()
+
+#ориентированный граф
+nn = int(input("Введите количество вершин: "))
+m = [[0] * nn for _ in range(nn)]
+for i in range(nn):
+    for j in range(nn):
+        e = (int((input(f"Введите расстояние между вершинами {i} и {j}(если его нет или нет дополнительного ребра, введите 0): "))))
+        m[i][j] = e
+        if (m[i][j] > 0):
+            m[i][j] = 1;
+        else:
+            m[i][j] = 0;
+for i in range(nn):
+    for j in range(nn):
+        print(m[i][j], end=' ')
+    print()
+
+#поиск в глубину
+# def dfs(graph, start, visited=None):
+#     if visited is None:
+#         visited = set()
+#     visited.add(start)
+#
+#     print(start)
+#
+#     for next in graph[start] - visited:
+#         dfs(graph, next, visited)
+#     return visited
+#
+#
+# graph = {'0': set(['1', '2']),
+#          '1': set(['0', '3', '4']),
+#          '2': set(['0']),
+#          '3': set(['1']),
+#          '4': set(['2', '3'])}
+#
+# dfs(graph, '0')
+
+#поиск в ширину(вывод ребер)
+
+# class Vertex:
+#     def __init__(self, key):
+#         self.id = key
+#         self.connectedTo = {}
+#
+#     def addNeighbor(self, nbr, weight=0):
+#         self.connectedTo[nbr] = weight
+#
+#     def __str__(self):
+#         return str(self.id) + ' connectedTo: ' + str([x.id for x in self.connectedTo])
+#
+#     def getConnections(self):
+#         return self.connectedTo.keys()
+#
+#     def getId(self):
+#         return self.id
+#
+#     def getWeight(self, nbr):
+#         return self.connectedTo[nbr]
+#
+#
+# class Graph:
+#     def __init__(self):
+#         self.vertList = {}
+#         self.numVertices = 0
+#
+#     def addVertex(self, key):
+#         self.numVertices = self.numVertices + 1
+#         newVertex = Vertex(key)
+#         self.vertList[key] = newVertex
+#         return newVertex
+#
+#     def getVertex(self, n):
+#         if n in self.vertList:
+#             return self.vertList[n]
+#         else:
+#             return None
+#
+#     def __contains__(self, n):
+#         return n in self.vertList
+#
+#     def addEdge(self, f, t, cost=0):
+#         if f not in self.vertList:
+#             nv = self.addVertex(f)
+#         if t not in self.vertList:
+#             nv = self.addVertex(t)
+#         self.vertList[f].addNeighbor(self.vertList[t], cost)
+#
+#     def getVertices(self):
+#         return self.vertList.keys()
+#
+#     def __iter__(self):
+#         return iter(self.vertList.values())
+#
+# g = Graph()
+# for i in range(6):
+#     g.addVertex(i)
+# g.addEdge(0,1,5)
+# g.addEdge(0,5,2)
+# g.addEdge(1,2,4)
+# g.addEdge(2,3,9)
+# g.addEdge(3,4,7)
+# g.addEdge(3,5,3)
+# g.addEdge(4,0,1)
+# g.addEdge(5,4,8)
+# g.addEdge(5,2,1)
+#
+# for v in g:
+#     for w in v.getConnections():
+#         print("( %s , %s )" % (v.getId(), w.getId()))
+# matrixf = [[0] * 6 for _ in range(6)]
+# for v in g:
+#     for w in v.getConnections():
+#         for l in t.addEdge():
+#         matrixf[v][w] = l;
+# for i in range(6):
+#     for j in range(6):
+#         print(matrixf[v][w], end=' ')
+#     print()
+
+import networkx as nx
+import matplotlib.pyplot as plt
+# G = nx.DiGraph(np.matrix(matrixf))
+# nx.draw(G, with_labels=True, node_size=300, arrows=True)
+# plt.show()
