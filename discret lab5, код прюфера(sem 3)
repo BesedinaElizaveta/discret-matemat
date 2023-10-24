@@ -1,0 +1,64 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+def prufer_decode(prufer_code, vertices):
+    tree = []
+    degrees = [1] * (len(vertices) + 2)
+
+    for vertex in prufer_code:
+        degrees[vertex] += 1
+
+    for vertex in prufer_code:
+        for v in vertices:
+            if degrees[v] == 1:
+                tree.append((v, vertex))
+                degrees[v] -= 1
+                degrees[vertex] -= 1
+                break
+
+    for v in vertices:
+        if degrees[v] == 1:
+            tree.append((v, prufer_code[-1]))
+
+    return tree
+prufer_code = list(map(int, input("Введите код Прюфера через пробел: ").split()))
+vertices = list(map(int, input("Введите номера вершин через пробел: ").split()))
+
+edges = prufer_decode(prufer_code, vertices)
+
+G = nx.Graph(edges)
+pos = nx.spring_layout(G)
+nx.draw(G, pos, with_labels=True, node_size=500, node_color='lightblue')
+plt.title("Дерево")
+plt.show()
+edges_str = ' '.join([f"{edge[0]}{edge[1]}" for edge in edges])
+print("Рёбра дерева:", edges_str)
+
+
+
+def tree_to_prufer(vertices, edges):
+    degrees = [0] * (len(vertices) + 1)
+    prufer_code = []
+
+    for edge in edges:
+        degrees[edge[0]] += 1
+        degrees[edge[1]] += 1
+
+    for i in range(len(vertices) - 2):
+        for j in range(1, len(vertices) + 1):
+            if degrees[j] == 1:
+                v = j
+                w = edges[0][0] if edges[0][1] == v else edges[0][1]
+                if degrees[w] > 0:
+                    prufer_code.append(w)
+                    degrees[v] -= 1
+                    degrees[w] -= 1
+                    edges.pop(0)
+                    break
+
+    return prufer_code
+vertices = list(map(int, input("Введите вершины через пробел: ").split()))
+edges = [tuple(map(int, input("Введите ребра через пробел: ").split())) for _ in range(len(vertices) - 1)]
+prufer_code = tree_to_prufer(vertices, edges)
+print("Код Прюфера:", " ".join(map(str, prufer_code)))
